@@ -1,0 +1,21 @@
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+});
+
+export function setAuthToken(token) {
+  if (token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete api.defaults.headers.common['Authorization'];
+  }
+}
+
+// Apply existing token from localStorage if present
+try {
+  const t = localStorage.getItem('token');
+  if (t) setAuthToken(t);
+} catch (e) {}
+
+export default api;
